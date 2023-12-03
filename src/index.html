@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <title>My Files</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="/dist/output.css" rel="stylesheet">
+        <script src="https://unpkg.com/htmx.org@1.9.9">htmx</script>
+        <script>
+            // Funkcja do aktualizacji daty i godziny
+            function aktualizujDateGodzine() {
+                // Utworzenie obiektu reprezentującego aktualną datę i czas
+                var obecnaDataGodzina = new Date();
+                // Ustawienie tekstu elementu o id 'currentDateTime'
+                document.getElementById('currentDateTime').innerText = obecnaDataGodzina.toLocaleString();
+            }
+
+            // Wywołanie funkcji początkowe do wyświetlenia daty i godziny przy ładowaniu strony
+            aktualizujDateGodzine();
+
+            // Ustawienie interwału do aktualizacji daty i godziny co sekundę (1000 milisekund)
+            setInterval(aktualizujDateGodzine, 1000);
+        </script>
+    </head>
+    <body class="bg-neutral-800">
+
+        <div class="align-middle bg-green-400 rounded-3xl border-8 border-black w-screen h-28 ">
+            <a href="/index" class="float-left">
+                <img src="src/img/logo.png" alt="Logo" class="w-24 h-24 ml-3 rounded-3xl border-8 border-green-900 hover:border-white ">
+            </a>
+
+            <div class="float-left">
+                <h1 class="text-4xl font-bold ml-28 mt-6"> Witaj na naszej stronie! </h1>
+            </div>
+
+            <div class="float-right">
+                <form 
+                    hx-post="/login" 
+                    hx-target="#manager" 
+                    method="post">
+                    <button type="submit" class="float-right bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full mr-9 mt-7">Zaloguj</button>
+            </div>
+            <div class="clear-both"></div>
+        </div>
+
+        <div id="manager" class="text-center border-green-900 bg-center w-96 h-80 bg-black border-8 ml-8 mt-4 rounded-3xl ">
+            <h1 class="text-white text-center font-bold ml-3 mt-3">Brak danych do wyświetlenia</h1>
+            <!--
+                {{ range .Files }}
+                <p> {{ .Name }} - {{ .Size }} </p>
+                {{ end }}
+            -->
+        </div>
+
+    </body>
+</html>
