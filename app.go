@@ -31,21 +31,27 @@ func main() {
     fmt.Println("Server is running...")
     index := func(w http.ResponseWriter, r *http.Request) {
         tmpl := template.Must(template.ParseFiles("src/index.html"))
+        tmpl.Execute(w, nil)
+    }
+    login := func(w http.ResponseWriter, r *http.Request) {
+        htmlStr := fmt.Sprintf("<form hx-post='/content' hx-target='#manager' method='post'> <label for='username' style='color: white;'>Użytkownik:</label><br> <input type='text' id='username' name='username' ><br> <label for='password' style='color: white;' >Hasło:</label><br> <input type='password' id='password' name='password'><br><br> <input type='submit' value='Zaloguj' style='background-color: white;'> </form>")
+        tmpl, _ := template.New("login").Parse(htmlStr)
+        tmpl.Execute(w, nil)
+    }
+    content := func(w http.ResponseWriter, r *http.Request) {
         files := map[string][]File{ // Ściąganie plików z BD
             "Files": {
                 {Name: "zdjecie.png", Size: 1024},
                 {Name: "tutorial.txt", Size: 2048},
             },
         }
+        htmlStr := fmt.Sprintf( "{{ range .Files }} <p class='text-white'> {{ .Name }} - {{ .Size }} </p> {{ end }}" )
+        tmpl, _ := template.New("content").Parse( htmlStr )
         tmpl.Execute(w, files)
     }
-    login := func(w http.ResponseWriter, r *http.Request) {
 
-        htmlStr := fmt.Sprintf("<form action='index' method='post'> <label for='username' style='color: white;'>Użytkownik:</label><br> <input type='text' id='username' name='username' ><br> <label for='password' style='color: white;' >Hasło:</label><br> <input type='password' id='password' name='password'><br><br> <input type='submit' value='Zaloguj' style='background-color: white;'> </form>")
-        tmpl, _ := template.New("login").Parse(htmlStr)
-        tmpl.Execute(w, nil)
-    }
     //HandleFunc czeka na funkcje, gdzie Handle czeka na handler
+    http.HandleFunc("/content", content) // Obsługiwanie content.html
     http.HandleFunc("/login", login) // Obsługiwanie loginu
     http.HandleFunc("/index", index) // Obsługiwanie index.html
     http.Handle("/", handler) // Obsługiwanie zapytań

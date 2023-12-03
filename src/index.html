@@ -7,21 +7,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="/dist/output.css" rel="stylesheet">
         <script src="https://unpkg.com/htmx.org@1.9.9">htmx</script>
-        <script>
-            // Funkcja do aktualizacji daty i godziny
-            function aktualizujDateGodzine() {
-                // Utworzenie obiektu reprezentującego aktualną datę i czas
-                var obecnaDataGodzina = new Date();
-                // Ustawienie tekstu elementu o id 'currentDateTime'
-                document.getElementById('currentDateTime').innerText = obecnaDataGodzina.toLocaleString();
-            }
-
-            // Wywołanie funkcji początkowe do wyświetlenia daty i godziny przy ładowaniu strony
-            aktualizujDateGodzine();
-
-            // Ustawienie interwału do aktualizacji daty i godziny co sekundę (1000 milisekund)
-            setInterval(aktualizujDateGodzine, 1000);
-        </script>
     </head>
     <body class="bg-neutral-800">
 
@@ -31,7 +16,7 @@
             </a>
 
             <div class="float-left">
-                <h1 class="text-4xl font-bold ml-28 mt-6"> Witaj na naszej stronie! </h1>
+                <h1 class="text-4xl font-bold ml-28 mt-6"> Witaj na stronie MyFiles! </h1>
             </div>
 
             <div class="float-right">
@@ -40,17 +25,14 @@
                     hx-target="#manager" 
                     method="post">
                     <button type="submit" class="float-right bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full mr-9 mt-7">Zaloguj</button>
+                </form>
             </div>
             <div class="clear-both"></div>
         </div>
 
         <div id="manager" class="text-center border-green-900 bg-center w-96 h-80 bg-black border-8 ml-8 mt-4 rounded-3xl ">
             <h1 class="text-white text-center font-bold ml-3 mt-3">Brak danych do wyświetlenia</h1>
-            <!--
-                {{ range .Files }}
-                <p> {{ .Name }} - {{ .Size }} </p>
-                {{ end }}
-            -->
+            <!--            {{ range .Files }}  <p class="text-white"> {{ .Name }} - {{ .Size }} </p>   {{ end }} -->
         </div>
 
     </body>
