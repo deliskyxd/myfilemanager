@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8005:8080
+    networks:
+      - filemanager
+
+  website:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    networks:
+        - filemanager 
+
+  database:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: MyFiles369
+    networks:
+      - filemanager
+
+networks:
+  filemanager:
+
+
+
+
