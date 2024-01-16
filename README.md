@@ -1,7 +1,12 @@
 # myfilemanager
-Web File Manager written in HTMX / Go / TypeWind CSS
+Mobile Web File Manager for your server
 
-TO-DO:
-- HTMX Active Search with files :D
-- HTMX Dropping items somwhere to download/interact with files 
+## Programming language
+- Golang
+- HTMX
+- TypeScript
+
+
+
+
 

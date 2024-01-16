@@ -1,5 +1,4 @@
 #!/bin/bash
 
-cd /var/www/html
-go mod download
-go run app.go
+# Skrypt odpalajacy serwer lokalnie
+

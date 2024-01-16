@@ -1,2 +1,10 @@
-examples
-*.png
+# Później nie wysyłać wszystkich plików które się budują ( main.go , /src) na gita
+# Tylko zostawić je w obrazie Dockerfile
+##############
+#src
+#main.go
+#init.sh
+##############
+
+tmp
+notatki.txt

@@ -1,5 +1,7 @@
 FROM alpine:3.19
 
+WORKDIR /var/www/html
+
 # installing dependencies
 RUN apk add --no-cache \
         bash \
@@ -8,7 +10,7 @@ RUN apk add --no-cache \
         go \
         vim 
 
-COPY . /var/www/html
-COPY --chmod=777 ./init.sh /usr/local/bin/init.sh
+COPY . .
+COPY --chmod=777 ./entrypoint.sh /usr/local/bin/entrypoint.sh
 
-ENTRYPOINT [ "init.sh" ]
+ENTRYPOINT [ "entrypoint.sh" ]
