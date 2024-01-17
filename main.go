@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	//"github.com/deliskyxd/myfilemanager/models"
-	"github.com/deliskyxd/myfilemanager/database"
-	"github.com/gofiber/fiber/v2"
-	"github.com/joho/godotenv"
 	"log"
 	"os"
+
+	"github.com/deliskyxd/myfilemanager/database"
+	"github.com/deliskyxd/myfilemanager/routes"
+	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -27,20 +29,20 @@ func main() {
         return c.Render("index.html", fiber.Map{})
     })
 
-    //Routers(app)
-    app.Get("/hello", hello)
+    createRoutes(app)
 	//Starting the web server
 	log.Fatal(app.Listen(":" + port))
 }
-
-//func Routers(app *fiber.App) {
-//    app.Get("/users", models.GetUsers)
-//    app.Get("/users/:id", models.GetUser)
-//    app.Post("/users", models.CreateUser)
-//    app.Delete("/users/:id", models.DeleteUser)
-//    app.Put("/users/:id", models.UpdateUser)
-//}
-
 func hello(c *fiber.Ctx) error {
-	return c.SendString("Hello, World 👋!")
+    return c.SendString("Hello from API 👋!")
 }
+
+func createRoutes(app *fiber.App) {
+    app.Get("/api", hello)
+    app.Post("/api/users", routes.CreateUser)
+    app.Get("/api/users", routes.GetUsers)
+    app.Get("/api/users/:id", routes.GetUser)
+    app.Put("/api/users/:id", routes.UpdateUser)
+    app.Delete("/api/users/:id", routes.DeleteUser)
+}
+
