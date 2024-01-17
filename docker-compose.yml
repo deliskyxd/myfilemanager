@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
   adminer:
+    container_name: adminer
     image: adminer
     restart: always
     ports:
@@ -9,26 +10,22 @@ services:
     networks:
       - filemanager
 
-  website:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 8000:8000
-    networks:
-        - filemanager 
-
   database:
+    container_name: mysql_files 
     image: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: MyFiles369
+    ports:
+      - 3306:3306
+    volumes:
+      #- ./src/mysql:/docker-entrypoint-initdb.d
+      - mysql:/var/lib/mysql
     networks:
       - filemanager
 
+volumes:
+  mysql:
+
 networks:
   filemanager:
-
-
-
-

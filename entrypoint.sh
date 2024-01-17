@@ -3,5 +3,5 @@
 cd /var/www/html
 go mod download
 #npx tailwindcss -i ./src/input.css -o ./dist/output.css 
-go run main.go
+go run src/main.go
 
