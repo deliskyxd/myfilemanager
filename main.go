@@ -1,70 +1,46 @@
 package main
 
 import (
-    "fmt"
-    "log"
-    "net/http"
-    "html/template"
-    //"github.com/gofiber/fiber/v2"
-    "github.com/deliskyxd/myfilemanager/database"
+	"fmt"
+	//"github.com/deliskyxd/myfilemanager/models"
+	"github.com/deliskyxd/myfilemanager/database"
+	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
+	"log"
+	"os"
 )
 
-type File struct {
-    Name string
-    Size int64
-}
-
-type Drive struct {
-    Name string
-    Size int64
-    files []File
-}
-type User struct {
-    Username string
-    Password string
-    drives []Drive
-}
-
-
 func main() {
-    database.Connect()
-    fmt.Println("Server is running...")
-    // Zmienne środowiskowe
+	// connecting to the database / getting env variables
+	database.Connect()
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	port := os.Getenv("PORT")
+	app := fiber.New()
+	fmt.Println("Server is running...")
 
-    // WAŻNE DO ROBIENIA FILE EXPLORERA!
-    //handler := http.FileServer(http.Dir("src"))
-    index := template.Must(template.ParseFiles("src/index.html"))
-    //HandleFunc waits for a function, where Handle waits for a Handler 
-    mux := http.NewServeMux()
-    mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        index.Execute(w, nil)
+    // Basic site routing
+    app.Static("/", "./src") // get files from src folder = base URL
+    app.Get("/", func(c *fiber.Ctx) error {
+        return c.Render("index.html", fiber.Map{})
     })
 
-    log.Fatal(http.ListenAndServe(":8080", mux))  // entering nil implicitly uses DefaultServeMux
+    //Routers(app)
+    app.Get("/hello", hello)
+	//Starting the web server
+	log.Fatal(app.Listen(":" + port))
 }
 
-//func contentHandler(w http.ResponseWriter, r *http.Request) {
-//    files := map[string][]File{ // Ściąganie plików z BD
-//        "Files": {
-//            {Name: "zdjecie.png", Size: 1024},
-//            {Name: "tutorial.txt", Size: 2048},
-//        },
-//    }
-//    htmlStr := fmt.Sprintf( "{{ range .Files }} <p class='text-white'> {{ .Name }} - {{ .Size }} </p> {{ end }}" )
-//    tmpl, _ := template.New("content").Parse( htmlStr )
-//    tmpl.Execute(w, files)
+//func Routers(app *fiber.App) {
+//    app.Get("/users", models.GetUsers)
+//    app.Get("/users/:id", models.GetUser)
+//    app.Post("/users", models.CreateUser)
+//    app.Delete("/users/:id", models.DeleteUser)
+//    app.Put("/users/:id", models.UpdateUser)
 //}
 
-// Using a database
-//import (
-//	"github.com/gofiber/fiber/v2"
-//	"github.com/deliskyxd/myfilemanager/database"
-//)
-//
-//func main(){
-//    database.Connect()
-//    PORT := "8500"
-//    app := fiber.New()
-//    app.Listen(":" + PORT)
-//}
-
+func hello(c *fiber.Ctx) error {
+	return c.SendString("Hello, World 👋!")
+}

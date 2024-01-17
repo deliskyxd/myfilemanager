@@ -5,6 +5,8 @@
 #main.go
 #init.sh
 ##############
+main
 
-tmp
+.env
+/tmp
 notatki.txt
