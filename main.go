@@ -23,26 +23,31 @@ func main() {
 	app := fiber.New()
 	fmt.Println("Server is running...")
 
-    // Basic site routing
-    app.Static("/", "./src") // get files from src folder = base URL
-    app.Get("/", func(c *fiber.Ctx) error {
-        return c.Render("index.html", fiber.Map{})
-    })
+	// Basic site routing
+	app.Static("/", "./src") // get files from src folder = base URL
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.Render("index.html", fiber.Map{})
+	})
 
-    createRoutes(app)
+	createRoutes(app)
 	//Starting the web server
 	log.Fatal(app.Listen(":" + port))
 }
+
 func hello(c *fiber.Ctx) error {
-    return c.SendString("Hello from API 👋!")
+	return c.SendString("Hello from API 👋!")
 }
 
 func createRoutes(app *fiber.App) {
-    app.Get("/api", hello)
-    app.Post("/api/users", routes.CreateUser)
-    app.Get("/api/users", routes.GetUsers)
-    app.Get("/api/users/:id", routes.GetUser)
-    app.Put("/api/users/:id", routes.UpdateUser)
-    app.Delete("/api/users/:id", routes.DeleteUser)
+	app.Get("/api", hello)
+	//app.Post("/api/users", routes.CreateUser)
+	app.Get("/api/users", routes.GetUsers)
+	app.Get("/api/users/:id", routes.GetUser)
+	app.Put("/api/users/:id", routes.UpdateUser)
+	app.Delete("/api/users/:id", routes.DeleteUser)
+	// jwt auth
+	app.Post("/signup", routes.Signup)
+	app.Post("/login", routes.Login)
+	app.Get("/private", routes.Private)
+	app.Get("/public", routes.Public)
 }
-
