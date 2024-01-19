@@ -27,8 +27,10 @@ func main() {
 	app.Static("/style", "./src/output.css")
 	app.Static("/img", "./src/img")
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("./src/templates/login.html", fiber.Map{})
+	app.Get("/", index)
+	app.Get("/login", index)
+	app.Get("/register", func(c *fiber.Ctx) error {
+		return c.Render("./src/templates/register.html", fiber.Map{})
 	})
 
 	guardedRoute := app.Group("/files")
@@ -51,10 +53,13 @@ func main() {
 func hello(c *fiber.Ctx) error {
 	return c.SendString("Hello from API 👋!")
 }
+func index(c *fiber.Ctx) error {
+	return c.Render("./src/templates/login.html", fiber.Map{})
+}
+
 
 func createRoutes(app *fiber.App) {
 	app.Get("/api", hello)
-	app.Get("/api/users", routes.GetUsers)
 	app.Delete("/api/users/:id", routes.DeleteUser)
 	// jwt auth
 	app.Post("/signup", routes.Signup)
