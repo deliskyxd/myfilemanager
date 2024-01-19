@@ -7,6 +7,7 @@ import (
 
 	"github.com/deliskyxd/myfilemanager/database"
 	"github.com/deliskyxd/myfilemanager/routes"
+	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 )
@@ -26,16 +27,22 @@ func main() {
 	app.Static("/style", "./src/output.css")
 	app.Static("/img", "./src/img")
 
-    app.Get("/", func(c *fiber.Ctx) error {
-        return c.Render("./src/templates/login.html", fiber.Map{})
-    })
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.Render("./src/templates/login.html", fiber.Map{})
+	})
 
-    guardedRoute := app.Group("/files")
+	guardedRoute := app.Group("/files")
+	guardedRoute.Use(jwtware.New(jwtware.Config{
+		Claims:       &routes.Claims{},
+		SigningKey:   jwtware.SigningKey{Key: []byte(routes.JwtSecretKey)},
+		TokenLookup:  "cookie:access-token",
+		ErrorHandler: routes.JWTErrorChecker,
+	}))
 	guardedRoute.Get("", func(c *fiber.Ctx) error {
 		return c.Render("./src/index.html", fiber.Map{})
 	})
 
-    // API routing
+	// API routing
 	createRoutes(app)
 	//Starting the web server
 	log.Fatal(app.Listen(":" + port))
