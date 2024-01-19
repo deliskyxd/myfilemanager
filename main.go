@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	//"github.com/deliskyxd/myfilemanager/models"
 	"log"
 	"os"
 
@@ -24,11 +23,19 @@ func main() {
 	fmt.Println("Server is running...")
 
 	// Basic site routing
-	app.Static("/", "./src") // get files from src folder = base URL
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("index.html", fiber.Map{})
+	app.Static("/style", "./src/output.css")
+	app.Static("/img", "./src/img")
+
+    app.Get("/", func(c *fiber.Ctx) error {
+        return c.Render("./src/templates/login.html", fiber.Map{})
+    })
+
+    guardedRoute := app.Group("/files")
+	guardedRoute.Get("", func(c *fiber.Ctx) error {
+		return c.Render("./src/index.html", fiber.Map{})
 	})
 
+    // API routing
 	createRoutes(app)
 	//Starting the web server
 	log.Fatal(app.Listen(":" + port))
@@ -40,10 +47,7 @@ func hello(c *fiber.Ctx) error {
 
 func createRoutes(app *fiber.App) {
 	app.Get("/api", hello)
-	//app.Post("/api/users", routes.CreateUser)
 	app.Get("/api/users", routes.GetUsers)
-	app.Get("/api/users/:id", routes.GetUser)
-	app.Put("/api/users/:id", routes.UpdateUser)
 	app.Delete("/api/users/:id", routes.DeleteUser)
 	// jwt auth
 	app.Post("/signup", routes.Signup)
